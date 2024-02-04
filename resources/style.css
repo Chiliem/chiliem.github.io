@@ -1,0 +1,36 @@
+* {
+    background-color: pink;
+}
+
+a {
+    color: black;
+    background-color: white;
+    text-decoration: none;
+}
+
+#YesButton {
+    left: 45%; 
+}
+
+#NoButton {
+    left: 55%; 
+}
+
+#Question {
+    position: absolute;
+    top: 40%; 
+    left: 39%;
+    font-size: 36px;
+}
+
+.ButtonBase {
+    position: absolute;
+    top: 50%; 
+    transform: translate(-10%, -10%);
+    transition: 0.3s;
+    font-size: 24px;
+    background-color: white;
+    border: 3px red solid;
+    padding: 20px;
+    border-radius: 10px;
+}
