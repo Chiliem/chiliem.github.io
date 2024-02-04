@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>&lt;3</title>
+        <link rel="stylesheet" type="text/css" href="./resources/style.css">
+    </head>
+    <body>
+        <div>Insert Gif here</div>
+        <div id="Question">Do you want to be my Valentine?</div>
+        <div id="YesButton" class="ButtonBase"><a href="02 celebrate.html">Yes</a></div>
+        <div id="NoButton" class="ButtonBase">No</div>
+
+        <!-- JavaScript at the end of body -->
+        <script type="text/javascript">
+                var shouldMove = true; // Flag to determine if the button should move
+
+            setTimeout(function() {
+                shouldMove = false; // Stop moving the button after 20 seconds
+            }, 20000); // 20000 milliseconds = 20 seconds
+
+            document.addEventListener('mousemove', function(e) {
+                if (!shouldMove) return; // If shouldMove is false, don't execute the moving logic
+
+                var button = document.getElementById('YesButton');
+                var buttonRect = button.getBoundingClientRect();
+                var mouseX = e.clientX;
+                var mouseY = e.clientY;
+
+                var deltaX = Math.abs(buttonRect.left + (buttonRect.width) - mouseX);
+                var deltaY = Math.abs(buttonRect.top + (buttonRect.height) - mouseY);
+                var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                var threshold = 100; // Distance in pixels when the button starts to move
+
+                if (distance < threshold) {
+                    var newLeft = Math.random() * (window.innerWidth - buttonRect.width)/1.3;
+                    var newTop = Math.random() * (window.innerHeight - buttonRect.height)/1.3;
+
+                    button.style.left = newLeft + 'px';
+                    button.style.top = newTop + 'px';
+                }
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                var button = document.getElementById('NoButton');
+                var buttonRect = button.getBoundingClientRect();
+                var mouseX = e.clientX;
+                var mouseY = e.clientY;
+
+                var deltaX = Math.abs(buttonRect.left + (buttonRect.width) - mouseX);
+                var deltaY = Math.abs(buttonRect.top + (buttonRect.height) - mouseY);
+                var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                var threshold = 100; // Distance in pixels when the button starts to move
+
+                if (distance < threshold) {
+                    var newLeft = Math.random() * (window.innerWidth - buttonRect.width)/1.3;
+                    var newTop = Math.random() * (window.innerHeight - buttonRect.height)/1.3;
+
+                    button.style.left = newLeft + 'px';
+                    button.style.top = newTop + 'px';
+                }
+            });
+
+
+        </script>
+    </body>
+</html>
