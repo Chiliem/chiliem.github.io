@@ -1,5 +1,5 @@
 * {
-    background-color: pink;
+    background-color: white;
     font-family: sans-serif;
 }
 
@@ -19,9 +19,8 @@ a {
     font-size: 32px;
     font-weight: bold;
     text-align: center; 
-    margin: 50px;
-    padding-top: 50px;
-    padding-bottom: 100px;
+    margin: 40px;
+    padding-top: 40px;
     justify-content: center;
     align-items: center;
 }
