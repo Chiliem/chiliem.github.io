@@ -1,0 +1,46 @@
+* {
+    background-color: white;
+    font-family: sans-serif;
+}
+
+a {
+    color: black;
+    background-color: lightgreen;
+    text-decoration: none;
+}
+
+#gifdiv {
+    position: absolute;
+    top: 10%; 
+    left: 45%;
+}
+
+#YesButton {
+    left: 41%; 
+    background-color: lightgreen;
+}
+
+#NoButton {
+    left: 55%;
+    background-color: lightcoral; 
+}
+
+#Question {
+    position: absolute;
+    top: 45%; 
+    left: 37%;
+    font-size: 50px;
+}
+
+.ButtonBase {
+    position: absolute;
+    top: 60%; 
+    transform: translate(-10%, -10%);
+    transition: 0.3s;
+    font-size: 36px;
+    font-weight: bold;
+    border: 3px black solid;
+    padding: 20px 50px;
+    border-radius: 10px;
+}
+

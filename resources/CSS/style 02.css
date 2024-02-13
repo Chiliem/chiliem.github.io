@@ -1,0 +1,32 @@
+* {
+    background-color: pink;
+    font-family: sans-serif;
+    border: 1px pink solid;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container{
+    width: auto;
+    height: 100vh;
+    display: flexbox;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.CentreUnit {
+    font-size: 32px;
+    font-weight: bold;
+    width: auto;
+    height: 20%;
+    text-align: center; 
+    margin: 50px;
+}
+
+#Message {
+    position: absolute;
+    
+}

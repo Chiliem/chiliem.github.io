@@ -1,0 +1,50 @@
+* {
+    background-color: pink;
+    font-family: sans-serif;
+    border: 1 px red solid;
+}
+
+a {
+    text-decoration: none;
+}
+
+.container{
+    width: auto;
+    height: 100vh;
+    display: flexbox;
+    justify-content: center;
+    align-items: center;
+}
+
+.CentreUnit {
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center; 
+    margin: 20px;
+    padding-top: 50px;
+}
+
+
+.CentreUnit table {
+    margin: auto;
+}
+
+.Photos {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.Photos img {
+    padding: 36px;
+}
+
+.ButtonBase {
+    font-size: 36px;
+    font-weight: bold;
+    border: 3px black solid;
+    padding: 20px 50px;
+    border-radius: 10px;
+    width: 200px;
+}
