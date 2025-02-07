@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 const player = {
     x: 50,
     y: 700,
-    width: 22,
+    width: 30,
     height: 50,
     color: 'red',
     dx: 0,
@@ -14,11 +14,33 @@ const player = {
     isJumping: false
   };
 
+  const CarolineMe = {
+    x: 750,
+    y: 150,
+    height: 50,
+    width: 28
+  };
+
+
+  const bubble = {
+    x: 750,
+    y: 150,
+    height: 70,
+    width: 100
+  };
+
+
   const playerImage = new Image();
   playerImage.src = "nomnom.jpg";
   
   const platformTile = new Image();
   platformTile.src = "platform.jpg";
+
+  const bubbleImage = new Image();
+  bubbleImage.src = "bubble.jpg";
+
+  const CarolineMeImage = new Image();
+  CarolineMeImage.src = "CarolineMe.jpg";
 
   const platforms = [
     { x: 0, y: 750, width: 800, height: 50, color: 'green' },
@@ -29,25 +51,30 @@ const player = {
     { x: 260, y: 520, width: 70, height: 50, color: 'green'},  
     { x: 10, y: 370, width: 20, height: 50, color: 'green'},  
     { x: 400, y: 250, width: 200, height: 50, color: 'green'},  
-    { x: 300, y: 120, width: 250, height: 50, color: 'green'},  
-    { x: 650, y: 100, width: 120, height: 50, color: 'green'},  
-    { x: 50, y: 130, width: 90, height: 50, color: 'green'},  
+    { x: 300, y: 120, width: 170, height: 50, color: 'green'},  
+    { x: 650, y: 100, width: 150, height: 50, color: 'green'},  
+    { x: 650, y: 0, width: 150, height: 50, color: 'green'},  
+    { x: 50, y: 50, width: 90, height: 50, color: 'green'},  
 
   ];
 
+  const keys = {}; // Track which keys are pressed
+
   document.addEventListener('keydown', (e) => {
-    const key = e.key.toLowerCase();
-    if (key === 'd') player.dx = 5;
-    if (key === 'a') player.dx = -5;
-    if (key === 'w' && !player.isJumping) {
-      player.dy = player.jumpStrength;
-      player.isJumping = true;
-    }
+      keys[e.key.toLowerCase()] = true; // Store key state
+  
+      if (keys['d']) player.dx = 5;
+      if (keys['a']) player.dx = -5;
+      if (keys['w'] && !player.isJumping) {
+          player.dy = player.jumpStrength;
+          player.isJumping = true;
+      }
   });
   
-
-  document.addEventListener('keyup', () => {
-    player.dx = 0;
+  document.addEventListener('keyup', (e) => {
+      keys[e.key.toLowerCase()] = false; // Remove key from tracking
+  
+      if (!keys['d'] && !keys['a']) player.dx = 0; // Stop movement only if neither key is held
   });
 
   function updatePlayer() {
@@ -96,9 +123,13 @@ const player = {
     ctx.fillStyle = "#87CEEB";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-    // Draw player
+    // Draw sprites
     ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
-  
+    ctx.drawImage(bubbleImage, bubble.x, bubble.y, bubble.width, bubble.height);
+    ctx.drawImage(CarolineMeImage, CarolineMe.x, CarolineMe.y, CarolineMe.width, CarolineMe.height);
+
+
+
     // Draw platforms with 50x50 tiles
     const tileSize = 50;
     platforms.forEach(platform => {
