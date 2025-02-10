@@ -14,33 +14,41 @@ const player = {
     isJumping: false
   };
 
+  const playerImage = new Image();
+  playerImage.src = "nomnom.jpg";
+
   const CarolineMe = {
-    x: 750,
+    x: 700,
     y: 150,
-    height: 50,
-    width: 28
-  };
-
-
-  const bubble = {
-    x: 750,
-    y: 150,
-    height: 70,
+    height: 100,
     width: 100
   };
 
-
-  const playerImage = new Image();
-  playerImage.src = "nomnom.jpg";
-  
-  const platformTile = new Image();
-  platformTile.src = "platform.jpg";
-
-  const bubbleImage = new Image();
-  bubbleImage.src = "bubble.jpg";
-
   const CarolineMeImage = new Image();
   CarolineMeImage.src = "CarolineMe.jpg";
+
+  const rocket = {
+    x: player.x + player.width /2, 
+    y: 750, // Starts under the player
+    width: 41, // Adjust as needed
+    height: 100, // Adjust as needed
+    visible: false 
+  };
+
+  const rocketImage = new Image();
+  rocketImage.src = "Jinx Ult.png";
+
+  const explosion = {
+    x: 0,
+    y: 0,
+    width: 100, // Adjust size as needed
+    height: 100, // Adjust size as needed
+    visible: false
+  };
+
+  const explosionImage = new Image();
+  explosionImage.src = "explosion.png";
+
 
   const platforms = [
     { x: 0, y: 750, width: 800, height: 50, color: 'green' },
@@ -57,6 +65,9 @@ const player = {
     { x: 50, y: 50, width: 90, height: 50, color: 'green'},  
 
   ];
+
+  const platformTile = new Image();
+  platformTile.src = "platform.jpg";
 
   const keys = {}; // Track which keys are pressed
 
@@ -103,6 +114,17 @@ const player = {
         onPlatform = true;
       }
     });
+
+    // Check collision with bubble
+    const isWithinXRange = player.x + player.width > CarolineMe.x && player.x < CarolineMe.x + CarolineMe.width;
+    const isTouchingCarolineMe = player.y + player.height >= CarolineMe.y && player.y + player.height <= CarolineMe.y + CarolineMe.height;
+
+    if (isWithinXRange && isTouchingCarolineMe) {
+      player.y = CarolineMe.y + CarolineMe.height ; // prevent from snapping to top
+      player.dy = 0; // Stop vertical movement
+      player.isJumping = false; // Allow jumping again
+    }
+  
   
     // If the player is not on any platform, they are falling
     if (!onPlatform) {
@@ -115,43 +137,104 @@ const player = {
       player.dy = 0;
       player.isJumping = false;
     }
-  }
+
+    // Rocket movement logic
+    if (rocket.visible) {
+      rocket.y -= 10; // Move up at 5 pixels per frame
+
+      // Check for collision with player
+      const isRocketColliding = 
+          player.x + player.width > rocket.x &&
+          player.x < rocket.x + rocket.width &&
+          player.y + player.height > rocket.y &&
+          player.y < rocket.y + rocket.height;
+
+      if (isRocketColliding) {
+          // Move player left without going off-screen
+          player.x = Math.max(0, player.x - 200);
+          
+          // Show explosion at rocket's position
+          explosion.x = rocket.x - 27;
+          explosion.y = rocket.y - 65;
+          explosion.visible = true;
+
+          // Hide rocket
+          rocket.visible = false;
+
+          // Remove explosion after 1 second
+          setTimeout(() => {
+              explosion.visible = false;
+          }, 500);
+      }
+
+      // Make the rocket disappear once it leaves the canvas
+      if (rocket.y + rocket.height < 0) {
+          rocket.visible = false;
+      }
+      }
+    }
+
+  
   
   
 
   function draw() {
-    ctx.fillStyle = "#87CEEB";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-    // Draw sprites
-    ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
-    ctx.drawImage(bubbleImage, bubble.x, bubble.y, bubble.width, bubble.height);
-    ctx.drawImage(CarolineMeImage, CarolineMe.x, CarolineMe.y, CarolineMe.width, CarolineMe.height);
+      ctx.fillStyle = "#87CEEB";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+      // Draw sprites
+      ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
+      ctx.drawImage(CarolineMeImage, CarolineMe.x, CarolineMe.y, CarolineMe.width, CarolineMe.height);
 
 
 
-    // Draw platforms with 50x50 tiles
-    const tileSize = 50;
-    platforms.forEach(platform => {
-      const columns = Math.ceil(platform.width / tileSize);
-      const rows = Math.ceil(platform.height / tileSize);
-      for (let i = 0; i < columns; i++) {
-        for (let j = 0; j < rows; j++) {
-          ctx.drawImage(platformTile,
-            platform.x + i * tileSize,
-            platform.y + j * tileSize,
-            tileSize,
-            tileSize
-          );
+      // Draw platforms with 50x50 tiles
+      const tileSize = 50;
+      platforms.forEach(platform => {
+        const columns = Math.ceil(platform.width / tileSize);
+        const rows = Math.ceil(platform.height / tileSize);
+        for (let i = 0; i < columns; i++) {
+          for (let j = 0; j < rows; j++) {
+            ctx.drawImage(platformTile,
+              platform.x + i * tileSize,
+              platform.y + j * tileSize,
+              tileSize,
+              tileSize
+            );
+          }
         }
-      }
-    });
-  }
+      });
 
+      // Draw Rocket if visible
+      if (rocket.visible) {
+        ctx.drawImage(rocketImage, rocket.x, rocket.y, rocket.width, rocket.height);
+      }
+      // Draw explosion if visible
+      if (explosion.visible) {
+        ctx.drawImage(explosionImage, explosion.x, explosion.y, explosion.width, explosion.height);
+      } 
+
+    }
+  
+
+
+  function spawnRocket() {
+    if (!rocket.visible){
+      rocket.x = player.x - 12; // Reset x position
+      rocket.y = 800; // Place under player
+      rocket.visible = true; 
+      }
+    }  
+  
+  setInterval(spawnRocket, 5000); // Call spawnRocket every 5 seconds
+
+
+  
   function gameLoop() {
     updatePlayer();
     draw();
     requestAnimationFrame(gameLoop);
   }
+  
   
   gameLoop();
