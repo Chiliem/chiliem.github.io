@@ -73,8 +73,23 @@ const player = {
     { x: 530, y: 300, width: 50, height: 50, visible: false, enable: true}  
   ];
 
+
+
   const boxboxImage = new Image();
   boxboxImage.src = "boxboxbox.png"
+
+  const PinkWard = {
+    x: 10,
+    y: 320,
+    height: 50,
+    width: 50,
+    visible: false,
+    enabled: false,
+    collected: false
+  };
+
+  const PinkWardImage = new Image();
+  PinkWardImage.src = "pink ward.png"
 
   const platforms = [
     { x: 0, y: 750, width: 800, height: 50},
@@ -161,7 +176,7 @@ const player = {
       // Check player collision with shaco boxes
       boxbox.forEach(box => {
         const isWithinXRange = player.x + player.width > box.x && player.x < box.x + box.width;
-        const isTouchingBox = player.y + player.height >= box.y && player.y + player.height <= box.y + box.height;
+        const isTouchingBox = player.y + player.height >= box.y && player.y <= box.y + box.height;
     
         if (isWithinXRange && isTouchingBox && box.enable) {
           player.dy = 0; // Stop vertical movement
@@ -174,7 +189,7 @@ const player = {
 
       // Check player collision with bubble
       const isWithinXRange = player.x + player.width > CarolineMe.x && player.x < CarolineMe.x + CarolineMe.width;
-      const isTouchingCarolineMe = player.y + player.height >= CarolineMe.y && player.y + player.height <= CarolineMe.y + CarolineMe.height;
+      const isTouchingCarolineMe = player.y + player.height >= CarolineMe.y && player.y <= CarolineMe.y + CarolineMe.height;
 
       if (isWithinXRange && isTouchingCarolineMe) {
         player.y = CarolineMe.y + CarolineMe.height ; // prevent from snapping to top
@@ -199,7 +214,7 @@ const player = {
       if (rocket.visible) {
         rocket.y -= 10; // Move up at 5 pixels per frame
 
-        // Check for collision with player
+        // Check for rocket collision with player
         const isRocketCollidingWithPlayer = 
             player.x + player.width > rocket.x &&
             player.x < rocket.x + rocket.width &&
@@ -224,7 +239,31 @@ const player = {
             }, 500);
         }
 
-        // Check for collision with Bubble
+        // Check rocket collision with shaco boxes
+        boxbox.forEach(box => {
+          const isWithinXRange = rocket.x + rocket.width > box.x && rocket.x < box.x + box.width;
+          const isTouchingBox = rocket.y + rocket.height >= box.y && rocket.y <= box.y + box.height;
+      
+          if (isWithinXRange && isTouchingBox && box.enable && box.visible) {
+            // Show explosion at rocket's position
+            box.enable = false;
+            box.visible = false;
+
+            explosion.x = rocket.x - 25;
+            explosion.y = rocket.y - 50;
+            explosion.visible = true;
+
+            // Hide rocket
+            rocket.visible = false;
+
+            // Remove explosion after 1 second
+            setTimeout(() => {
+                explosion.visible = false;
+            }, 500);            
+          }
+        });
+
+        // Check for Rocket collision with Bubble
         const isRocketCollidingWithBubble = 
             CarolineMe.x + CarolineMe.width > rocket.x &&
             CarolineMe.x < rocket.x + rocket.width &&
@@ -265,6 +304,28 @@ const player = {
             player.visible = false;
         }
 
+        // Check for Player collision with Pink Ward
+        const isWardColliding = 
+            player.x + player.width > PinkWard.x &&
+            player.x < PinkWard.x + PinkWard.width &&
+            player.y + player.height > PinkWard.y &&
+            player.y < PinkWard.y + PinkWard.height;
+
+          if (isWardColliding && PinkWard.enabled && PinkWard.visible){
+            PinkWard.visible = false;
+            PinkWard.enabled = false;
+            PinkWard.collected = true;
+            boxbox.forEach(box =>{
+              box.visible = true;
+              })
+            }        
+
+        // make ward appear when she reaches near the top
+        if(!PinkWard.enabled && !PinkWard.visible && !PinkWard.collected && player.y < 150){
+          PinkWard.visible = true;
+          PinkWard.enabled = true;
+        }
+
       }
     }
   
@@ -278,6 +339,9 @@ const player = {
       // Draw sprites
       if (player.visible){
         ctx.drawImage(playerImage, player.x, player.y, player.width, player.height);
+      }
+      if (PinkWard.visible){
+        ctx.drawImage(PinkWardImage, PinkWard.x, PinkWard.y, PinkWard.width, PinkWard.height);
       }
       if (CarolineMe.visible){
         ctx.drawImage(CarolineMeImage, CarolineMe.x, CarolineMe.y, CarolineMe.width, CarolineMe.height);
