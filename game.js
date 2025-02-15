@@ -1,3 +1,7 @@
+let GameStartAlertCompleted = false;
+let FirstRocketCompleted = false;
+let GameCompleted = false;
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
@@ -184,6 +188,7 @@ const player = {
           // Move player left without going off-screen
           player.targetX = Math.max(0, player.x - 50);
           
+
         }
       });
 
@@ -391,8 +396,13 @@ const player = {
       rocket.x = player.x - 12; // Reset x position
       rocket.y = 800; // Place under player
       rocket.visible = true; 
-      }
-    }  
+
+      if (!FirstRocketCompleted){
+        window.alert("Watch out of Jinx Rockets!");
+        FirstRocketCompleted = true;
+      }    
+    }
+  }  
   
   setInterval(spawnRocket, 5000); // Call spawnRocket every 5 seconds
 
@@ -402,6 +412,17 @@ const player = {
     updatePlayer();
     draw();
     requestAnimationFrame(gameLoop);
+    
+
+    if (!GameStartAlertCompleted){
+      window.alert("Oh no! My nomnom is inside the Squid Game bubble! I must join him!")
+      GameStartAlertCompleted = true;
+    };
+
+    if (TogetherBubble.visible && !GameCompleted){
+      window.alert("Yay! We're together forever!");
+      GameCompleted = true;
+    }
   }
   
   
